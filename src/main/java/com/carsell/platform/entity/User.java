@@ -6,10 +6,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -20,7 +23,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -32,6 +37,11 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class User {
+
+    public enum Role {
+        ADMIN,
+        USER
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CAR_UNIQUE_ID")
@@ -55,18 +65,23 @@ public class User {
     @Column(name="first_name", nullable = false)
     private String firstName;
 
+    @NotBlank(message = "Password is required")
+    @Column(name="password", nullable = false)
+    private String password;
+
     @Column(name="phone", length = 15)
     private String phone;
 
     @Embedded
-    private History address;
+    private History history;
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Car> cars;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles")
-    @Column(name = "name")
-    private List<String> roles;
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private Set<String> roles = new HashSet<>();
 
 }
