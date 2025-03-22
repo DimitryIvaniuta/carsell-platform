@@ -1,0 +1,1 @@
+ALTER TABLE CARS add column fuel TEXT;

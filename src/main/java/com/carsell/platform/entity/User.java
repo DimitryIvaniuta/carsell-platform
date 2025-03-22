@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
@@ -44,7 +45,8 @@ public class User {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CAR_UNIQUE_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CS_UNIQUE_ID")
+    @SequenceGenerator(name = "CS_UNIQUE_ID", sequenceName = "CS_UNIQUE_ID", allocationSize = 1)
     @Column(name="id", nullable = false)
     private Long id;
 
@@ -52,10 +54,18 @@ public class User {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
+    @NotBlank(message = "Login is required")
+    @Column(name = "login", nullable = false, unique = true)
+    private String login;
+
     @Email(message = "Email should be valid")
     @NotBlank(message = "Email is required")
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @NotBlank(message = "Name is requred")
+    @Column(name="name", nullable = false)
+    private String name;
 
     @NotBlank(message = "Last name is requred")
     @Column(name="last_name", nullable = false)
@@ -82,6 +92,7 @@ public class User {
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private Set<String> roles = new HashSet<>();
+    @Builder.Default
+    private Set<Role> roles = new HashSet<>();
 
 }

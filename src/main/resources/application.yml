@@ -21,3 +21,15 @@ spring:
 logging:
   level:
     root: INFO
+    com:
+      fasterxml:
+        jackson: DEBUG
+    org:
+      springframework:
+        http:
+          converter: DEBUG
+        web:
+          servlet:
+            mvc:
+              method:
+                annotation: DEBUG

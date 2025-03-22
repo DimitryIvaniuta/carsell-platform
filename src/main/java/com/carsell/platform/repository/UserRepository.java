@@ -1,4 +1,4 @@
-package com.carsell.platform;
+package com.carsell.platform.repository;
 
 import com.carsell.platform.entity.User;
 import jakarta.validation.constraints.Email;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UsersRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 

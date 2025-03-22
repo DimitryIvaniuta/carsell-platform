@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 @Builder
 public class CreateUserRequest {
@@ -14,6 +16,9 @@ public class CreateUserRequest {
     @NotBlank(message = "Email is required")
     private String email;
 
+    @NotBlank(message = "Name is required")
+    private String name;
+
     @NotBlank(message = "First name is required")
     private String firstName;
 
@@ -23,6 +28,10 @@ public class CreateUserRequest {
     @NotBlank(message = "Password is required")
     private String password;
 
+    @NotBlank(message = "Login is required")
+    private String login;
+
     private String phone;
 
+    private Set<String> roles;
 }

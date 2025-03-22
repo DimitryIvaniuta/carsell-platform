@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class UserRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CAR_UNIQUE_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CS_UNIQUE_ID")
     private Integer id;
 
     @Column(name = "name", nullable = false)
