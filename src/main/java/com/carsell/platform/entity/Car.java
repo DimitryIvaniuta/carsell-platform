@@ -1,6 +1,5 @@
 package com.carsell.platform.entity;
 
-import com.carsell.platform.dto.BaseCarRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorType;
@@ -18,7 +17,6 @@ import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Formula;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -31,7 +29,7 @@ import java.time.ZonedDateTime;
 @Data
 @NoArgsConstructor
 @SuperBuilder
-public abstract class Car {//<T extends BaseCarRequest>
+public abstract class Car {
 
     /**
      * Primary key.
@@ -94,7 +92,6 @@ public abstract class Car {//<T extends BaseCarRequest>
         this.setPrice(request.getPrice());
         this.setDescription(request.getDescription());
     }*/
-
     public abstract CarType getCarType();
 
 //    public abstract void updateFromRequest(T request);
@@ -131,34 +128,33 @@ public abstract class Car {//<T extends BaseCarRequest>
     }
 
     public void applyDiscount(BigDecimal discountPercentage) {
-        if (discountPercentage.compareTo(BigDecimal.ZERO) < 0 ||
-                discountPercentage.compareTo(new BigDecimal("100")) > 0) {
+        if (discountPercentage.compareTo(BigDecimal.ZERO) < 0
+                || discountPercentage.compareTo(new BigDecimal("100")) > 0) {
             throw new IllegalArgumentException("Discount must be between 0 and 100");
         }
         this.discountPercentage = discountPercentage;
     }
 
-    public void updatePrice(BigDecimal newPrice) {
+    public void updatePrice(final BigDecimal newPrice) {
         if (newPrice.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Price cannot be negative");
         }
         this.price = newPrice;
     }
 
-    public void changeOwner(User newOwner) {
+    public void changeOwner(final User newOwner) {
         if (newOwner == null) {
             throw new IllegalArgumentException("New owner cannot be null");
         }
         this.seller = newOwner;
     }
 
-    public void updateDescription(String newDescription) {
+    public void updateDescription(final String newDescription) {
         if (newDescription == null || newDescription.isBlank()) {
             throw new IllegalArgumentException("Description cannot be empty");
         }
         this.description = newDescription;
     }
-
 
 
 }

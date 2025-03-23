@@ -23,6 +23,14 @@ dependencies {
     implementation 'jakarta.enterprise:jakarta.enterprise.cdi-el-api:4.1.0'
     implementation 'jakarta.interceptor:jakarta.interceptor-api'
 
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
     compileOnly('org.projectlombok:lombok:1.18.36')
     annotationProcessor('org.projectlombok:lombok:1.18.36')
 

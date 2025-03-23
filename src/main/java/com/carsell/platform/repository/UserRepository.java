@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
+    Optional<User> findByLogin(String login);
+
     Optional<User> findByUsername(String username);
 
     List<User> findByEmail(@Email(message = "Email should be valid") @NotBlank(message = "Email is required") String email);

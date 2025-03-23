@@ -12,4 +12,5 @@ public record BaseCarResponse(
         int year,
         BigDecimal price,
         String description
-) {}
+) {
+}

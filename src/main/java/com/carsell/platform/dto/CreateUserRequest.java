@@ -1,5 +1,6 @@
 package com.carsell.platform.dto;
 
+import com.carsell.platform.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
@@ -33,5 +34,5 @@ public class CreateUserRequest {
 
     private String phone;
 
-    private Set<String> roles;
+    private Set<User.Role> roles;
 }

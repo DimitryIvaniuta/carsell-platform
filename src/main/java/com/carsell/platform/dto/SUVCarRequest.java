@@ -1,6 +1,5 @@
 package com.carsell.platform.dto;
 
-import com.carsell.platform.entity.Car;
 import com.carsell.platform.entity.CarType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

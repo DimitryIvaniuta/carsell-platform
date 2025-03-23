@@ -8,6 +8,7 @@ import com.carsell.platform.exception.ResourceNotFoundException;
 import com.carsell.platform.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -24,12 +25,15 @@ public class UserServiceHandler implements UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     // Utility method to map a User entity to a UserResponse DTO.
     private UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
+                .name(user.getName())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .phone(user.getPhone())
@@ -44,7 +48,7 @@ public class UserServiceHandler implements UserService {
         Iterable<User> usersIterable = userRepository.findAll();
         return StreamSupport.stream(usersIterable.spliterator(), false)
                 .map(this::mapToUserResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -64,7 +68,7 @@ public class UserServiceHandler implements UserService {
                 .login(request.getLogin())
                 .name(request.getName())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))//request.getPassword())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .phone(request.getPhone())
@@ -112,5 +116,6 @@ public class UserServiceHandler implements UserService {
         log.info("Updated roles for user with id: {}", updatedUser.getId());
         return mapToUserResponse(updatedUser);
     }
+
 }
 

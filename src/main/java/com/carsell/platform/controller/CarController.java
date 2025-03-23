@@ -43,7 +43,7 @@ public class CarController {
      * @return a ResponseEntity containing the CarResponse DTO
      */
     @GetMapping("/{id}")
-    public ResponseEntity<CarResponse> getCarById(@PathVariable Long id) {
+    public ResponseEntity<CarResponse> getCarById(@PathVariable final Long id) {
         CarResponse response = carService.getCarById(id);
         return ResponseEntity.ok(response);
     }
@@ -55,7 +55,7 @@ public class CarController {
      * @return a ResponseEntity containing the created CarResponse DTO
      */
     @PostMapping
-    public ResponseEntity<CarResponse> createCar(@Valid @RequestBody BaseCarRequest request) {
+    public ResponseEntity<CarResponse> createCar(@Valid @RequestBody final BaseCarRequest request) {
         CarResponse response = carService.createCar(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
@@ -68,7 +68,7 @@ public class CarController {
      * @return a ResponseEntity containing the updated CarResponse DTO
      */
     @PutMapping("/{id}")
-    public ResponseEntity<CarResponse> updateCar(@PathVariable Long id, @Valid @RequestBody BaseCarRequest request) {
+    public ResponseEntity<CarResponse> updateCar(@PathVariable final Long id, @Valid @RequestBody final BaseCarRequest request) {
         CarResponse response = carService.updateCar(id, request);
         return ResponseEntity.ok(response);
     }
@@ -80,7 +80,7 @@ public class CarController {
      * @return a ResponseEntity with no content
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCar(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCar(@PathVariable final Long id) {
         carService.deleteCar(id);
         return ResponseEntity.noContent().build();
     }

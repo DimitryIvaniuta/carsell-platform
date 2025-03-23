@@ -33,3 +33,7 @@ logging:
             mvc:
               method:
                 annotation: DEBUG
+
+jwt:
+  secret: "YourBase64EncodedSecretKeyThatIsAtLeast512BitsLongForHS512Algorithm"
+  expirationMs: 86400000

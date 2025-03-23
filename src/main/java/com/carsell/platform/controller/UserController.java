@@ -31,40 +31,78 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * Retrieves all users.
+     *
+     * @return a list of UserResponse DTOs
+     */
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
+
+    /**
+     * Retrieves a user by ID.
+     *
+     * @param id the user identifier
+     * @return the UserResponse DTO
+     */
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable final Long id) {
         UserResponse userResponse = userService.getUserById(id);
         return ResponseEntity.ok(userResponse);
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
+    /**
+     * Creates a new user (signup).
+     *
+     * @param createUserRequest the user creation request payload
+     * @return the created user as a UserResponse DTO
+     */
+    @PostMapping("/signup")
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody final CreateUserRequest createUserRequest) {
         UserResponse userResponse = userService.createUser(createUserRequest);
         return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
     }
 
+    /**
+     * Updates an existing user.
+     *
+     * @param id                the user identifier
+     * @param updateUserRequest the update payload
+     * @return the updated UserResponse DTO
+     */
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,
-                                                   @Valid @RequestBody UpdateUserRequest updateUserRequest) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable final Long id,
+                                                   @Valid @RequestBody final UpdateUserRequest updateUserRequest) {
         UserResponse userResponse = userService.updateUser(id, updateUserRequest);
         return ResponseEntity.ok(userResponse);
     }
 
+    /**
+     * Deletes a user by ID.
+     *
+     * @param id the user identifier
+     * @return HTTP 204 No Content if deletion is successful.
+     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable final Long id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Updates user roles by ID.
+     *
+     * @param id    the user identifier.
+     * @param roles the user roles.
+     * @return the updated UserResponse DTO.
+     */
     @PatchMapping("/{id}/roles")
-    public ResponseEntity<UserResponse> updateUserRoles(@PathVariable Long id,
-                                                        @RequestBody Set<User.Role> roles) {
+    public ResponseEntity<UserResponse> updateUserRoles(@PathVariable final Long id,
+                                                        @RequestBody final Set<User.Role> roles) {
         UserResponse userResponse = userService.updateUserRoles(id, roles);
         return ResponseEntity.ok(userResponse);
     }

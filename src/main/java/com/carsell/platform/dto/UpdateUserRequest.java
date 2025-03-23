@@ -1,9 +1,12 @@
 package com.carsell.platform.dto;
 
+import com.carsell.platform.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.Set;
 
 @Data
 @Builder
@@ -26,5 +29,7 @@ public class UpdateUserRequest {
     private String password;
 
     private String phone;
+
+    private Set<User.Role> roles;
 
 }
