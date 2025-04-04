@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 //                user.getPassword(),
 //                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
 //        );
-
+        new BCryptPassword().d
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword()) // ensure password is encoded (e.g. BCrypt)

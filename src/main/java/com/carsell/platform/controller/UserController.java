@@ -49,7 +49,7 @@ public class UserController {
      * @param id the user identifier
      * @return the UserResponse DTO
      */
-    @GetMapping("/{id}")
+    @GetMapping("/api/users/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable final Long id) {
         UserResponse userResponse = userService.getUserById(id);
         return ResponseEntity.ok(userResponse);
@@ -63,6 +63,20 @@ public class UserController {
      */
     @PostMapping("/signup")
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody final CreateUserRequest createUserRequest) {
+        /*
+        todo null response values
+        {
+    "id": 10060,
+    "username": "seller2",
+    "email": "seller2@example.com",
+    "name": "Car2",
+    "firstName": "Car2",
+    "lastName": "Seller2",
+    "phone": null,
+    "createdAt": null,
+    "updatedAt": null
+}
+         */
         UserResponse userResponse = userService.createUser(createUserRequest);
         return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
     }

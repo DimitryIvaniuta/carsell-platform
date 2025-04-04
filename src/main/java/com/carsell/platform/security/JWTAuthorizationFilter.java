@@ -54,11 +54,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         if (request.getSession(false) != null) {
             var session = request.getSession(false);
             return session != null ? (String) session.getAttribute("JWT_TOKEN") : null;
-
-//            Object sessionToken = request.getSession(false).getAttribute("JWT_TOKEN");
-//            if (sessionToken instanceof String) {
-//                return (String) sessionToken;
-//            }
         }
         return null;
     }

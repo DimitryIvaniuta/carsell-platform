@@ -22,6 +22,8 @@ logging:
   level:
     root: INFO
     com:
+      carsell:
+        platform: DEBUG
       fasterxml:
         jackson: DEBUG
     org:

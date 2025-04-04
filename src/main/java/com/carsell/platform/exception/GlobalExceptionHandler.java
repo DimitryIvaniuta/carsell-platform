@@ -107,4 +107,17 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(JwtAuthenticationProcessingException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleResourceJwtException(JwtAuthenticationProcessingException ex) {
+        log.warn("Jwt Authentication exception: {}", ex.getMessage());
+        return new ErrorResponse(
+                ZonedDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "Unauthorized",
+                ex.getMessage(),
+                ""
+        );
+    }
+
 }

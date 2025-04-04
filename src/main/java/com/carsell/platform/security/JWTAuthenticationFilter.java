@@ -32,6 +32,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws AuthenticationException {
 
         try {
+            // Check if the request body is empty
+            if (request.getContentLength() == 0) {
+                String errMsg = "Login request body is empty";
+                logger.error(errMsg);
+                throw new JwtAuthenticationProcessingException(errMsg);
+            }
             LoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(
@@ -41,6 +47,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     );
             return authenticationManager.authenticate(authToken);
         } catch (IOException e) {
+            String errMsg = "Could not read login request: " + e.getMessage();
+            logger.error(errMsg, e);
             throw new JwtAuthenticationProcessingException("Could not read login request: " + e.getMessage(), e);
         }
     }
