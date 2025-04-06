@@ -18,6 +18,9 @@ public class SedanCarRequest extends BaseCarRequest {
     @NotNull(message = "Trunk capacity is required for a sedan")
     private Double trunkCapacity;
 
+    @NotNull(message = "Sedan capacity")
+    private Integer sedanCapacity;
+
     @Override
     public CarType getSupportedCarType() {
         return CarType.SEDAN;

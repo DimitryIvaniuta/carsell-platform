@@ -51,6 +51,19 @@ public class User {
     @Column(name="id", nullable = false)
     private Long id;
 
+    // Account status flags:
+    @Column(name="account_non_expired", nullable = false)
+    private boolean accountNonExpired;
+
+    @Column(name="account_non_locked", nullable = false)
+    private boolean accountNonLocked;
+
+    @Column(name="credentials_non_expired", nullable = false)
+    private boolean credentialsNonExpired;
+
+    @Column(name="enabled", nullable = false)
+    private boolean enabled;
+
     @NotBlank(message = "Username is required")
     @Column(name = "username", nullable = false, unique = true)
     private String username;

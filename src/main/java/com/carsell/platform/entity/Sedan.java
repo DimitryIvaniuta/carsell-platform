@@ -21,6 +21,8 @@ public class Sedan extends Car {//<SedanCarRequest>
 
     private double trunkCapacity;
 
+    private int sedanCapacity = 2;
+
     @Override
     public CarType getCarType() {
         return CarType.SEDAN;

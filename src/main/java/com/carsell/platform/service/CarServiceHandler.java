@@ -7,6 +7,7 @@ import com.carsell.platform.entity.User;
 import com.carsell.platform.exception.ResourceNotFoundException;
 import com.carsell.platform.repository.CarRepository;
 import com.carsell.platform.repository.UserRepository;
+import com.carsell.platform.security.UserContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class CarServiceHandler implements CarService {
     private final UserRepository userRepository;
     private final CarResponseMapperService carResponseMapperService;
     private final CarRequestMapperService carRequestMapperService;
+    private final UserContext userContext;
 
     @Override
     @Transactional(readOnly = true)
@@ -33,7 +35,7 @@ public class CarServiceHandler implements CarService {
         Iterable<Car> cars = carRepository.findAll();
         return StreamSupport.stream(cars.spliterator(), false)
                 .map(carResponseMapperService::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -48,8 +50,9 @@ public class CarServiceHandler implements CarService {
     @Transactional
     public CarResponse createCar(BaseCarRequest request) {
         // Retrieve the seller by its ID.
-        User seller = userRepository.findById(request.getSellerId())
-                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id: " + request.getSellerId()));
+        Long loggedUserId = userContext.getUserId();
+        User seller = userRepository.findById(loggedUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id: " + loggedUserId));
 
         // Use CarMapper to convert the request to a new Car entity.
         Car car = carRequestMapperService.toEntity(request);

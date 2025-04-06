@@ -30,7 +30,6 @@ import java.math.BigDecimal;
 @ToString
 public abstract class BaseCarRequest {
 
-
     @NotBlank(message = "Make is required")
     private String make;
 
@@ -42,9 +41,6 @@ public abstract class BaseCarRequest {
 
     @NotNull(message = "Price is required")
     private BigDecimal price;
-
-    @NotNull(message = "Seller id is required")
-    private Long sellerId;
 
     private String description;
 

@@ -22,6 +22,7 @@ public class SedanRequestMapper extends AbstractCarRequestMapper {
         final SedanCarRequest sedanCarRequest = (SedanCarRequest)request;
         final Sedan sedan = Sedan.builder()
                 .trunkCapacity(Optional.ofNullable(sedanCarRequest.getTrunkCapacity()).orElse(0.0))
+                .sedanCapacity(Optional.ofNullable(sedanCarRequest.getSedanCapacity()).orElse(2))
                 .build();
         return mapCommonFields(request, sedan);
     }
@@ -34,6 +35,7 @@ public class SedanRequestMapper extends AbstractCarRequestMapper {
         final Sedan sedan = (Sedan)mapCommonFields(request, entity);
         final SedanCarRequest sedanCarRequest = (SedanCarRequest)request;
         sedan.setTrunkCapacity(Optional.ofNullable(sedanCarRequest.getTrunkCapacity()).orElse(0.0));
+        sedan.setSedanCapacity(Optional.ofNullable(sedanCarRequest.getSedanCapacity()).orElse(2));
     }
 
     /**

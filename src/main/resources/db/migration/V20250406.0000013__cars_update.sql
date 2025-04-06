@@ -1,0 +1,1 @@
+alter table cars add column sedan_capacity smallint;
