@@ -1,5 +1,6 @@
 package com.carsell.platform.security;
 
+import com.carsell.platform.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +22,9 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
 
+    private final CustomUserDetailsService userDetailsService;
+
+
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
@@ -30,14 +34,19 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             String jwt = extractToken(request);
             if (jwt != null && jwtUtil.validateJwtToken(jwt)) {
                 String username = jwtUtil.getUsernameFromJwtToken(jwt);
+                // Load full user details to get a CustomUserDetails instance.
+                CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(username);
 
                 // Create an authentication token (here using a dummy authority list, replace with real authorities)
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(username, null, null);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//                UsernamePasswordAuthenticationToken authentication =
+//                        new UsernamePasswordAuthenticationToken(username, null, null);
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 // Set the authenticated user in the SecurityContext
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         } catch (Exception e) {
             log.error(e.getMessage());

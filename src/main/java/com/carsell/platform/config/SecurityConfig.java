@@ -38,7 +38,7 @@ public class SecurityConfig {
         jwtAuthenticationFilter.setFilterProcessesUrl("/api/auth/login");
 
         // Create the authorization filter (for all other requests).
-        JWTAuthorizationFilter jwtAuthorizationFilter = new JWTAuthorizationFilter(jwtUtil);
+        JWTAuthorizationFilter jwtAuthorizationFilter = new JWTAuthorizationFilter(jwtUtil, userDetailsService);
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 // Enable CSRF protection with a cookie-based repository
