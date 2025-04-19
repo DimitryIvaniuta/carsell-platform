@@ -27,6 +27,9 @@ public class GlobalExceptionHandler {
                 .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
                 .toList();
 
+        // Log full stack trace
+        log.error("Validation failed: {}", errors, ex);
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(ZonedDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -38,7 +41,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    // Handle constraint violation exceptions (for example, from @Validated parameters)
+    // Handle constraint violation exceptions (e.g., from @Validated parameters)
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(
             ConstraintViolationException ex, WebRequest request) {
@@ -46,6 +49,8 @@ public class GlobalExceptionHandler {
         List<String> errors = ex.getConstraintViolations().stream()
                 .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
                 .toList();
+
+        log.error("Constraint violation: {}", errors, ex);
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(ZonedDateTime.now())
@@ -60,8 +65,8 @@ public class GlobalExceptionHandler {
 
     // Catch-all exception handler for any unanticipated exceptions
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(
-            Exception ex, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, WebRequest request) {
+        log.error("An unexpected error occurred", ex);
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(ZonedDateTime.now())
@@ -75,49 +80,47 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageConversionException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorResponse> handleHttpMessageConversionException(HttpMessageConversionException ex) {
-        // Log full stack trace
-        log.error("HttpMessageConversionException occurred", ex);
-
-        // Get the most specific cause for deeper details
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleHttpMessageConversionException(HttpMessageConversionException ex, WebRequest request) {
+        log.error("HTTP message conversion failed", ex);
         Throwable rootCause = ex.getMostSpecificCause();
         String detailedMessage = rootCause.getMessage();
 
-        ErrorResponse errorResponse = new ErrorResponse(
-                ZonedDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "Bad Request",
-                detailedMessage,
-                ""
-        );
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(ZonedDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error("Bad Request")
+                .message(detailedMessage)
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleResourceNotFound(ResourceNotFoundException ex) {
-        log.warn("Resource not found: {}", ex.getMessage());
-        return new ErrorResponse(
-                ZonedDateTime.now(),
-                HttpStatus.NOT_FOUND.value(),
-                "Not Found",
-                ex.getMessage(),
-                ""
-        );
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex, WebRequest request) {
+        log.warn("Resource not found: {}", ex.getMessage(), ex);
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(ZonedDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error("Not Found")
+                .message(ex.getMessage())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(JwtAuthenticationProcessingException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ErrorResponse handleResourceJwtException(JwtAuthenticationProcessingException ex) {
-        log.warn("Jwt Authentication exception: {}", ex.getMessage());
-        return new ErrorResponse(
-                ZonedDateTime.now(),
-                HttpStatus.UNAUTHORIZED.value(),
-                "Unauthorized",
-                ex.getMessage(),
-                ""
-        );
+    public ResponseEntity<ErrorResponse> handleJwtAuthenticationProcessingException(JwtAuthenticationProcessingException ex, WebRequest request) {
+        log.warn("JWT Authentication exception: {}", ex.getMessage(), ex);
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(ZonedDateTime.now())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .error("Unauthorized")
+                .message(ex.getMessage())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
-
 }

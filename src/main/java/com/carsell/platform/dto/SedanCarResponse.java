@@ -6,6 +6,7 @@ import lombok.Builder;
 @Builder
 public record SedanCarResponse(
         BaseCarResponse base,
+        Integer sedanCapacity,
         Double trunkCapacity  // Sedan-specific field
 ) implements CarResponse {
 

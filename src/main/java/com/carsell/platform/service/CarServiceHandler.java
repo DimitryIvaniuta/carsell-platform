@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
@@ -32,7 +31,8 @@ public class CarServiceHandler implements CarService {
     @Override
     @Transactional(readOnly = true)
     public List<CarResponse> getAllCars() {
-        Iterable<Car> cars = carRepository.findAll();
+        User seller = getCurrentUser();
+        Iterable<Car> cars = carRepository.findBySellerId(seller.getId());
         return StreamSupport.stream(cars.spliterator(), false)
                 .map(carResponseMapperService::toResponse)
                 .toList();
@@ -50,9 +50,7 @@ public class CarServiceHandler implements CarService {
     @Transactional
     public CarResponse createCar(BaseCarRequest request) {
         // Retrieve the seller by its ID.
-        Long loggedUserId = userContext.getUserId();
-        User seller = userRepository.findById(loggedUserId)
-                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id: " + loggedUserId));
+        User seller = getCurrentUser();
 
         // Use CarMapper to convert the request to a new Car entity.
         Car car = carRequestMapperService.toEntity(request);
@@ -83,6 +81,11 @@ public class CarServiceHandler implements CarService {
         return carResponseMapperService.toResponse(updatedCar);
     }
 
+    private User getCurrentUser() {
+        Long loggedUserId = userContext.getUserId();
+        return userRepository.findById(loggedUserId)
+                .orElseThrow(() -> new ResourceNotFoundException("Seller not found with id: " + loggedUserId));
+    }
     @Override
     @Transactional
     public void deleteCar(Long id) {

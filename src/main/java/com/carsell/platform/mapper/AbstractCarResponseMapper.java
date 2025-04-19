@@ -11,8 +11,10 @@ public abstract class AbstractCarResponseMapper<T extends Car> implements CarRes
      * Builds the common part of the response DTO from the Car entity.
      */
     public BaseCarResponse buildCommonResponse(T car) {
+
         return BaseCarResponse.builder()
                 .id(car.getId())
+                .carType(car.getCarType())
                 .make(car.getMake())
                 .model(car.getModel())
                 .year(car.getYear())

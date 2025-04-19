@@ -15,6 +15,7 @@ public class SedanResponseMapper extends AbstractCarResponseMapper<Sedan> {
         Sedan sedan = (Sedan) car;
         return SedanCarResponse.builder()
                 .base(buildCommonResponse(sedan))
+                .sedanCapacity(sedan.getSedanCapacity())
                 .trunkCapacity(sedan.getTrunkCapacity())
                 .build();
     }

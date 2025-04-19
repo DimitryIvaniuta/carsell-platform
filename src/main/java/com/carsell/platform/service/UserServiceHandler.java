@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -66,11 +67,15 @@ public class UserServiceHandler implements UserService {
         User user = User.builder()
                 .username(request.getUsername())
                 .login(request.getLogin())
-                .name(request.getName())
+                .name(Optional.ofNullable(request.getName()).orElse(request.getUsername()))
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))//request.getPassword())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
+                .enabled(true)
                 .phone(request.getPhone())
                 .build();
         User savedUser = userRepository.save(user);
