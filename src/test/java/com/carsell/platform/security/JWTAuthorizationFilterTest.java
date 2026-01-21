@@ -1,5 +1,6 @@
 package com.carsell.platform.security;
 
+import com.carsell.platform.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.AfterEach;
@@ -29,13 +30,15 @@ class JWTAuthorizationFilterTest {
     // Our filter under test
     private JWTAuthorizationFilter jwtAuthorizationFilter;
 
+    private CustomUserDetailsService customUserDetails;
+
     // A mock FilterChain to verify that the request passes along.
     private FilterChain filterChain;
 
     @BeforeEach
     public void setUp() {
         // Create the filter instance using the autowired jwtUtil.
-        jwtAuthorizationFilter = new JWTAuthorizationFilter(jwtUtil);
+        jwtAuthorizationFilter = new JWTAuthorizationFilter(jwtUtil, customUserDetails);
         // Create a mock FilterChain.
         filterChain = mock(FilterChain.class);
         // Clear the SecurityContextHolder before each test.

@@ -56,8 +56,9 @@ public class SecurityConfig {
                                 "/users/register",
                                 "/api/auth/login",
                                 "/csrf",
-                                "/api/users/signup"
-                        ).permitAll() // "/actuator/**"
+                                "/api/users/signup",
+                                "/actuator/**"
+                        ).permitAll()
                         // All other endpoints require authentication
                         .anyRequest().authenticated()
                 )

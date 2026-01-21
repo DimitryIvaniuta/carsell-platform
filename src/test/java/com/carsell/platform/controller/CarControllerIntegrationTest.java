@@ -134,7 +134,7 @@ class CarControllerIntegrationTest {
                 .year(2020)
                 .price(BigDecimal.valueOf(25000))
                 .description("A reliable sedan.")
-                .sellerId(1L)
+//                .sellerId(1L)
                 .trunkCapacity(15.5)
                 .build();
 
@@ -175,7 +175,7 @@ class CarControllerIntegrationTest {
                 .year(2020)
                 .price(BigDecimal.valueOf(24000)) // discounted price
                 .description("A reliable sedan, now with discount.")
-                .sellerId(1L)
+//                .sellerId(1L)
                 .trunkCapacity(16.0) // updated capacity
                 .build();
 
